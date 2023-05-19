@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
+require_relative './gamepieces'
+
+# board class for chess game
 class GameBoard
+
+  include GamePieces
 
   attr_accessor :board, :player_one, :player_two, :current_player
 
   def initialize
-    @board = Array.new(8) { Array.new(8, "\u25AA")}
+    @board = Array.new(8) { Array.new(8, "\u25AA") }
     @player_one = player_one
     @player_two = player_two
     @current_player = nil
@@ -19,8 +24,30 @@ class GameBoard
     end
   end
 
+  def populat_board(pieces, board_rev: false)
+    pieces.each_with_index do |k, k_index|
+      k.each_with_index do |l, l_index|
+        curr_pie = assign_vars([k_index, l_index], board_rev, l)
+        board_rev ? @board.reverse[k_index][l_index] = curr_pie.symbol : @board[k_index][l_index] = curr_pie.symbol
+      end
+    end 
+  end
+
+  def assign_vars(pos, color, init_obj)
+    init_obj.start_pos = pos
+    init_obj.white_piece = color
+    init_obj.symbol = deter_gm_piece(init_obj.white_piece, init_obj.symbol)
+    init_obj
+  end
+
+  def initiate_board
+    populat_board(GamePieces::WHITE_PIECES, false)
+    populat_board(GamePieces::BLACK_PIECES, true)
+    show_board_with_numbers
+  end
+
 end
 
 my_board = GameBoard.new
 
-my_board.show_board_with_numbers
+my_board.initiate_board
