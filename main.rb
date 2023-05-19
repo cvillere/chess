@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative './gamepieces'
+require_relative './player'
 
 # board class for chess game
 class GameBoard
@@ -44,6 +45,17 @@ class GameBoard
     populat_board(GamePieces::WHITE_PIECES, false)
     populat_board(GamePieces::BLACK_PIECES, true)
     show_board_with_numbers
+    assign_players
+  end
+
+  def create_player(num)
+    name = get_player_name(num)
+    Player.new(name, sym)
+  end
+
+  def assign_players
+    @player_one = create_player(1)
+    @player_two = create_player(2)
   end
 
 end
