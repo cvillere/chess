@@ -9,13 +9,14 @@ module GamePieces
   # king piece class
   class King
 
-    attr_accessor :start_pos, :end_pos, :symbol, :white_piece, :check, :check_mate
+    attr_accessor :start_pos, :end_pos, :symbol, :white_piece, :player, :check, :check_mate
 
     def initialize
       @start_pos = start_pos
       @end_pos = end_pos
       @symbol = ["\u2654", "\u265A"]
       @white_piece = white_piece
+      @player = player
       @check = nil
       @check_mate = nil
     end
@@ -24,26 +25,28 @@ module GamePieces
   # queen piece class
   class Queen
 
-    attr_accessor :start_pos, :end_pos, :symbol, :white_piece
+    attr_accessor :start_pos, :end_pos, :symbol, :player, :white_piece
 
     def initialize
       @start_pos = start_pos
       @end_pos = end_pos
       @symbol = ["\u2655", "\u265B"]
       @white_piece = white_piece
+      @player = player
     end
   end
 
   # rook piece class
   class Rook
 
-    attr_accessor :start_pos, :end_pos, :symbol, :white_piece
+    attr_accessor :start_pos, :end_pos, :symbol, :player, :white_piece
 
     def initialize
       @start_pos = start_pos
       @end_pos = end_pos
       @symbol = ["\u2656", "\u265C"]
       @white_piece = white_piece
+      @player = player
     end
     
   end
@@ -51,13 +54,14 @@ module GamePieces
   # knight piece class
   class Knight
 
-    attr_accessor :start_pos, :end_pos, :symbol, :white_piece
+    attr_accessor :start_pos, :end_pos, :symbol, :player, :white_piece
     
     def initialize
       @start_pos = start_pos
       @end_pos = end_pos
       @symbol = ["\u2658", "\u265E"]
       @white_piece = white_piece
+      @player = player
     end
   end
 
@@ -71,6 +75,7 @@ module GamePieces
       @end_pos = end_pos
       @symbol = ["\u2657", "\u265D"]
       @white_piece = white_piece
+      @player = player
     end
 
   end
@@ -85,6 +90,7 @@ module GamePieces
       @end_pos = end_pos
       @symbol = ["\u2659", "\u265F"]
       @white_piece = white_piece
+      @player = player
     end
   end
 

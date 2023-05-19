@@ -25,7 +25,7 @@ class GameBoard
     end
   end
 
-  def populat_board(pieces, board_rev: false)
+  def populat_board(pieces, board_rev = false)
     pieces.each_with_index do |k, k_index|
       k.each_with_index do |l, l_index|
         curr_pie = assign_vars([k_index, l_index], board_rev, l)
@@ -50,13 +50,22 @@ class GameBoard
 
   def create_player(num)
     name = get_player_name(num)
-    Player.new(name, sym)
+    Player.new(name)
   end
 
   def assign_players
     @player_one = create_player(1)
+    GamePieces::BLACK_PIECES.each {|piec| piec.player = @player_one} 
     @player_two = create_player(2)
+    GamePieces::WHITE_PIECES.each {|piec| piec.player = @player_two}
   end
+
+  def get_player_name(player_num)
+    puts "what is player #{player_num}'s name"
+    gets.chomp
+  end
+
+
 
 end
 
