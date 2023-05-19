@@ -68,7 +68,7 @@ module GamePieces
   # bishop piece class
   class Bishop
 
-    attr_accessor :start_pos, :end_pos, :symbol, :white_piece
+    attr_accessor :start_pos, :end_pos, :symbol, :player, :white_piece
 
     def initialize
       @start_pos = start_pos
@@ -83,7 +83,7 @@ module GamePieces
   # pawn piece class
   class Pawn
 
-    attr_accessor :start_pos, :end_pos, :symbol, :white_piece
+    attr_accessor :start_pos, :end_pos, :symbol, :player, :white_piece
     
     def initialize
       @start_pos = start_pos

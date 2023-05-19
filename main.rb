@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
-require_relative './gamepieces'
-require_relative './player'
+require_relative 'gamepieces'
+require_relative 'player'
+require_relative 'PiecesFuncs'
 
 # board class for chess game
 class GameBoard
 
   include GamePieces
+  include PiecesFuncs
 
   attr_accessor :board, :player_one, :player_two, :current_player
 
@@ -34,13 +36,6 @@ class GameBoard
     end 
   end
 
-  def assign_vars(pos, color, init_obj)
-    init_obj.start_pos = pos
-    init_obj.white_piece = color
-    init_obj.symbol = deter_gm_piece(init_obj.white_piece, init_obj.symbol)
-    init_obj
-  end
-
   def initiate_board
     populat_board(GamePieces::WHITE_PIECES, false)
     populat_board(GamePieces::BLACK_PIECES, true)
@@ -55,9 +50,9 @@ class GameBoard
 
   def assign_players
     @player_one = create_player(1)
-    GamePieces::BLACK_PIECES.each {|piec| piec.player = @player_one} 
+    add_player_to_piece(GamePieces::BLACK_PIECES, @player_one)
     @player_two = create_player(2)
-    GamePieces::WHITE_PIECES.each {|piec| piec.player = @player_two}
+    add_player_to_piece(GamePieces::WHITE_PIECES, @player_two)
   end
 
   def get_player_name(player_num)
@@ -65,7 +60,9 @@ class GameBoard
     gets.chomp
   end
 
-
+  def turns
+    @current_player == @player_one ? @current_player = @player_two : @current_player = @player_one
+  end
 
 end
 
