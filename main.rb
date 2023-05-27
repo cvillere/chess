@@ -37,7 +37,7 @@ class GameBoard
     pieces.each_with_index do |k, k_index|
       k.each_with_index do |l, l_index|
         curr_pie = assign_vars(board_rev, l)
-        board_rev ? @board.reverse[k_index][l_index] = curr_pie.symbol : @board[k_index][l_index] = curr_pie.symbol
+        board_rev ? @board[k_index][l_index] = curr_pie.symbol : @board.reverse[k_index][l_index] = curr_pie.symbol
         board_rev ? curr_pie.start_pos = [curr_pie.pos[0], l_index] : curr_pie.start_pos = [curr_pie.pos[1], l_index]
       end
     end
@@ -45,7 +45,9 @@ class GameBoard
 
   def initiate_board
     populat_board(GamePieces::WHITE_PIECES, false)
+    puts "white_pieces #{GamePieces::WHITE_PIECES}"
     populat_board(GamePieces::BLACK_PIECES, true)
+    puts "black_pieces #{GamePieces::BLACK_PIECES}"
     show_board_with_numbers
     assign_players
   end
@@ -69,9 +71,12 @@ class GameBoard
     gets.chomp
   end
 
-  def deter_piece
+  def deter_piece(start_spot)
     @current_player == @player_one ? my_pieces = GamePieces::BLACK_PIECES : my_pieces = GamePieces::WHITE_PIECES
-    my_pieces.find { |pie| pie.start_pos == start_spot }
+    # puts "my_pieces #{my_pieces}"
+    my_pieces.each do |n|
+      n.find { |pie| return pie if pie.start_pos == start_spot }
+    end
   end
 
   def start_game
@@ -80,7 +85,9 @@ class GameBoard
     turns
     x = true
     until x == false
+      show_board_with_numbers
       play_game
+      turns
     end
     new_game
   end
@@ -94,15 +101,17 @@ class GameBoard
     stop_spot = get_stop_spot(@current_player)
     check_move = deter_leg_move(start_spot, stop_spot)
     (try_again; player_move) if check_move == false
-    curr_pie = deter_piece
+    curr_pie = deter_piece(start_spot)
     curr_pie.start_pos = stop_spot
     @board[stop_spot[0]][stop_spot[1]] = curr_pie.symbol
+    @board[start_spot[0]][stop_spot[1]] = "\u25AA"
   end
 
   def deter_leg_move(start_spot, stop_spot)
-    curr_pie = deter_piece
+    curr_pie = deter_piece(start_spot)
+    # puts "curr_pie -- #{curr_pie}"
     return false if @current_player != curr_pie.player
-    curr_pie.pick_move_val_meth(start_spot, stop_spot, curr_pie.class.name)
+    pick_move_val_meth(start_spot, stop_spot, curr_pie.class.name)
   end
 
   def place_piece
@@ -112,6 +121,7 @@ class GameBoard
 end
 
 GameBoard.new.start_game
+
 
 
 

@@ -15,7 +15,7 @@ module GamePieces
     def initialize
       @start_pos = start_pos
       @end_pos = end_pos
-      @symbol = ["\u2654", "\u265A"]
+      @symbol = ["\u265A", "\u2654"]
       @pos = [0, 7]
       @white_piece = white_piece
       @player = player
@@ -32,7 +32,7 @@ module GamePieces
     def initialize
       @start_pos = start_pos
       @end_pos = end_pos
-      @symbol = ["\u2655", "\u265B"]
+      @symbol = ["\u265B", "\u2655"]
       @pos = [0, 7]
       @white_piece = white_piece
       @player = player
@@ -47,7 +47,7 @@ module GamePieces
     def initialize
       @start_pos = start_pos
       @end_pos = end_pos
-      @symbol = ["\u2656", "\u265C"]
+      @symbol = ["\u265C", "\u2656"]
       @pos = [0, 7]
       @white_piece = white_piece
       @player = player
@@ -63,7 +63,7 @@ module GamePieces
     def initialize
       @start_pos = start_pos
       @end_pos = end_pos
-      @symbol = ["\u2658", "\u265E"]
+      @symbol = ["\u265E", "\u2658"]
       @pos = [0, 7]
       @white_piece = white_piece
       @player = player
@@ -78,7 +78,7 @@ module GamePieces
     def initialize
       @start_pos = start_pos
       @end_pos = end_pos
-      @symbol = ["\u2657", "\u265D"]
+      @symbol = ["\u265D", "\u2657"]
       @pos = [0, 7]
       @white_piece = white_piece
       @player = player
@@ -94,7 +94,7 @@ module GamePieces
     def initialize
       @start_pos = start_pos
       @end_pos = end_pos
-      @symbol = ["\u2659", "\u265F"]
+      @symbol = ["\u265F", "\u2659"]
       @pos = [1, 6]
       @white_piece = white_piece
       @player = player
