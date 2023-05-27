@@ -3,12 +3,14 @@
 require_relative 'gamepieces'
 require_relative 'player'
 require_relative 'PiecesFuncs'
+require_relative 'displayinstructions'
 
 # board class for chess game
 class GameBoard
 
   include GamePieces
   include PiecesFuncs
+  include DisplayInstructions
 
   attr_accessor :board, :player_one, :player_two, :current_player
 
@@ -19,8 +21,12 @@ class GameBoard
     @current_player = nil
   end
 
+  def turns
+    @current_player == @player_one ? @current_player = @player_two : @current_player = @player_one
+  end
+
   def show_board_with_numbers
-    puts '   a  b  c  d  e  f  g  h'
+    puts '   1  2  3  4  5  6  7  8'
     @board.each_with_index do |sub_arr, row_num|
       row_str = sub_arr.join('  ')
       puts "#{row_num + 1}  #{row_str}"
@@ -30,10 +36,11 @@ class GameBoard
   def populat_board(pieces, board_rev = false)
     pieces.each_with_index do |k, k_index|
       k.each_with_index do |l, l_index|
-        curr_pie = assign_vars([k_index, l_index], board_rev, l)
+        curr_pie = assign_vars(board_rev, l)
         board_rev ? @board.reverse[k_index][l_index] = curr_pie.symbol : @board[k_index][l_index] = curr_pie.symbol
+        board_rev ? curr_pie.start_pos = [curr_pie.pos[0], l_index] : curr_pie.start_pos = [curr_pie.pos[1], l_index]
       end
-    end 
+    end
   end
 
   def initiate_board
@@ -50,8 +57,10 @@ class GameBoard
 
   def assign_players
     @player_one = create_player(1)
+    puts "player 1, you will be playing the black pieces"
     add_player_to_piece(GamePieces::BLACK_PIECES, @player_one)
     @player_two = create_player(2)
+    puts "player 2, you will be playing the white pieces"
     add_player_to_piece(GamePieces::WHITE_PIECES, @player_two)
   end
 
@@ -60,12 +69,50 @@ class GameBoard
     gets.chomp
   end
 
-  def turns
-    @current_player == @player_one ? @current_player = @player_two : @current_player = @player_one
+  def deter_piece
+    @current_player == @player_one ? my_pieces = GamePieces::BLACK_PIECES : my_pieces = GamePieces::WHITE_PIECES
+    my_pieces.find { |pie| pie.start_pos == start_spot }
+  end
+
+  def start_game
+    game_instructions
+    initiate_board
+    turns
+    x = true
+    until x == false
+      play_game
+    end
+    new_game
+  end
+
+  def play_game
+    player_move
+  end
+
+  def player_move
+    start_spot = get_start_spot(@current_player)
+    stop_spot = get_stop_spot(@current_player)
+    check_move = deter_leg_move(start_spot, stop_spot)
+    (try_again; player_move) if check_move == false
+    curr_pie = deter_piece
+    curr_pie.start_pos = stop_spot
+    @board[stop_spot[0]][stop_spot[1]] = curr_pie.symbol
+  end
+
+  def deter_leg_move(start_spot, stop_spot)
+    curr_pie = deter_piece
+    return false if @current_player != curr_pie.player
+    curr_pie.pick_move_val_meth(start_spot, stop_spot, curr_pie.class.name)
+  end
+
+  def place_piece
+
   end
 
 end
 
-my_board = GameBoard.new
+GameBoard.new.start_game
 
-my_board.initiate_board
+
+
+#my_board.play_game
