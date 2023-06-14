@@ -14,7 +14,6 @@ module GamePieces
 
     def initialize
       @start_pos = start_pos
-      @end_pos = end_pos
       @symbol = ["\u265A", "\u2654"]
       @pos = [0, 7]
       @white_piece = white_piece
@@ -31,7 +30,6 @@ module GamePieces
 
     def initialize
       @start_pos = start_pos
-      @end_pos = end_pos
       @symbol = ["\u265B", "\u2655"]
       @pos = [0, 7]
       @white_piece = white_piece
@@ -46,7 +44,6 @@ module GamePieces
 
     def initialize
       @start_pos = start_pos
-      @end_pos = end_pos
       @symbol = ["\u265C", "\u2656"]
       @pos = [0, 7]
       @white_piece = white_piece
@@ -62,7 +59,6 @@ module GamePieces
     
     def initialize
       @start_pos = start_pos
-      @end_pos = end_pos
       @symbol = ["\u265E", "\u2658"]
       @pos = [0, 7]
       @white_piece = white_piece
@@ -77,7 +73,6 @@ module GamePieces
 
     def initialize
       @start_pos = start_pos
-      @end_pos = end_pos
       @symbol = ["\u265D", "\u2657"]
       @pos = [0, 7]
       @white_piece = white_piece
@@ -93,7 +88,7 @@ module GamePieces
     
     def initialize
       @start_pos = start_pos
-      @end_pos = end_pos
+      @num_of_turns = 0
       @symbol = ["\u265F", "\u2659"]
       @pos = [1, 6]
       @white_piece = white_piece
@@ -110,13 +105,5 @@ module GamePieces
 
 
   end
-
-  WHITE_PIECES = [[Rook.new, Knight.new, Bishop.new, King.new, Queen.new, Bishop.new,
-    Knight.new, Rook.new], [Pawn.new, Pawn.new, Pawn.new, Pawn.new, Pawn.new,
-    Pawn.new, Pawn.new, Pawn.new]]
-
-  BLACK_PIECES = [[Rook.new, Knight.new, Bishop.new, King.new, Queen.new, Bishop.new,
-    Knight.new, Rook.new], [Pawn.new, Pawn.new, Pawn.new, Pawn.new, Pawn.new,
-    Pawn.new, Pawn.new, Pawn.new]]
 
 end

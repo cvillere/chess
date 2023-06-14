@@ -18,7 +18,21 @@ class GameBoard
     @board = Array.new(8) { Array.new(8, "\u25AA") }
     @player_one = player_one
     @player_two = player_two
+    @black_pieces = b_pieces
+    @white_pieces = w_pieces
     @current_player = nil
+  end
+
+  def b_pieces
+    [[Rook.new, Knight.new, Bishop.new, King.new, Queen.new, Bishop.new,
+      Knight.new, Rook.new], [Pawn.new, Pawn.new, Pawn.new, Pawn.new, Pawn.new,
+      Pawn.new, Pawn.new, Pawn.new]]
+  end
+
+  def w_pieces
+    [[Rook.new, Knight.new, Bishop.new, King.new, Queen.new, Bishop.new,
+      Knight.new, Rook.new], [Pawn.new, Pawn.new, Pawn.new, Pawn.new, Pawn.new,
+      Pawn.new, Pawn.new, Pawn.new]]
   end
 
   def turns
@@ -44,10 +58,8 @@ class GameBoard
   end
 
   def initiate_board
-    populat_board(GamePieces::WHITE_PIECES, false)
-    puts "white_pieces #{GamePieces::WHITE_PIECES}"
-    populat_board(GamePieces::BLACK_PIECES, true)
-    puts "black_pieces #{GamePieces::BLACK_PIECES}"
+    populat_board(@white_pieces, false)
+    populat_board(@black_pieces, true)
     show_board_with_numbers
     assign_players
   end
@@ -60,10 +72,10 @@ class GameBoard
   def assign_players
     @player_one = create_player(1)
     puts "player 1, you will be playing the black pieces"
-    add_player_to_piece(GamePieces::BLACK_PIECES, @player_one)
+    add_player_to_piece(@black_pieces, @player_one)
     @player_two = create_player(2)
     puts "player 2, you will be playing the white pieces"
-    add_player_to_piece(GamePieces::WHITE_PIECES, @player_two)
+    add_player_to_piece(@white_pieces, @player_two)
   end
 
   def get_player_name(player_num)
@@ -72,7 +84,7 @@ class GameBoard
   end
 
   def deter_piece(start_spot)
-    @current_player == @player_one ? my_pieces = GamePieces::BLACK_PIECES : my_pieces = GamePieces::WHITE_PIECES
+    @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
     # puts "my_pieces #{my_pieces}"
     my_pieces.each do |n|
       n.find { |pie| return pie if pie.start_pos == start_spot }
@@ -99,28 +111,32 @@ class GameBoard
   def player_move
     start_spot = get_start_spot(@current_player)
     stop_spot = get_stop_spot(@current_player)
-    check_move = deter_leg_move(start_spot, stop_spot)
+    check_move = deter_leg_move(start_spot, stop_spot) ## produces an error right now -- need to add self as arg.
+    puts "check_move #{check_move}"
     (try_again; player_move) if check_move == false
     curr_pie = deter_piece(start_spot)
     curr_pie.start_pos = stop_spot
     @board[stop_spot[0]][stop_spot[1]] = curr_pie.symbol
-    @board[start_spot[0]][stop_spot[1]] = "\u25AA"
+    @board[start_spot[0]][start_spot[1]] = "\u25AA"
   end
 
   def deter_leg_move(start_spot, stop_spot)
     curr_pie = deter_piece(start_spot)
-    # puts "curr_pie -- #{curr_pie}"
+    puts "curr_pie -- #{curr_pie}"
+    puts "current_player - #{@current_player}"
     return false if @current_player != curr_pie.player
-    pick_move_val_meth(start_spot, stop_spot, curr_pie.class.name)
+    puts "check #{pick_move_val_meth(@board, start_spot, stop_spot, curr_pie.class.name)}"
+    pick_move_val_meth(@board, start_spot, stop_spot, curr_pie.class.name)
   end
 
-  def place_piece
-
+  def place_piece 
+    
   end
 
 end
 
 GameBoard.new.start_game
+
 
 
 

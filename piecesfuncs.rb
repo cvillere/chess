@@ -17,14 +17,17 @@ module PiecesFuncs
     init_obj
   end
 
-  def pick_move_val_meth(obj_name, start_pos, stop_pos)
-    check_pawn_move_validity(start_pos, stop_pos) if obj_name.class.name == "Pawn"
+  def pick_move_val_meth(board, start_pos, stop_pos, obj_name)
+    check_pawn_move_validity(board, start_pos, stop_pos) if obj_name.include? 'Pawn'
   end
 
-  def check_pawn_move_validity(start_pos, stop_pos)
-    return false if (start_pos[0] - stop_pos[0]).abs > 1 || (start_pos[1] - stop_pos[1]).abs > 1
+  def check_pawn_move_validity(board, start_pos, stop_pos)
 
-    return false if (start_pos[0] - stop_pos[0]).abs.zero? && (start_pos[1] - stop_pos[1]).abs >= 1
+    return false if (start_pos[0] - stop_pos[0]).to_i.abs > 1 || (start_pos[1] - stop_pos[1]).to_i.abs > 1
+
+    return false if (start_pos[0] - stop_pos[0]).to_i.abs.zero? && (start_pos[1] - stop_pos[1]).to_i.abs >= 1
+
+    return false if board[start_pos[0]][start_pos[1]] == "\u25AA"
 
     true
   end
