@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'MoveChecks'
+
 module GamePieces
 
   def deter_gm_piece(pred, sym_arr)
@@ -9,8 +11,10 @@ module GamePieces
   # king piece class
   class King
 
-    attr_accessor :start_pos, :end_pos, :symbol, :pos, 
-                  :white_piece, :player, :check,:check_mate
+    include MoveChecks
+
+    attr_accessor :start_pos, :end_pos, :symbol, :pos,
+                  :white_piece, :player, :check, :check_mate
 
     def initialize
       @start_pos = start_pos
@@ -26,6 +30,8 @@ module GamePieces
   # queen piece class
   class Queen
 
+    include MoveChecks
+
     attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece
 
     def initialize
@@ -39,6 +45,8 @@ module GamePieces
 
   # rook piece class
   class Rook
+
+    include MoveChecks
 
     attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece
 
@@ -55,6 +63,8 @@ module GamePieces
   # knight piece class
   class Knight
 
+    include MoveChecks
+
     attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece
     
     def initialize
@@ -68,6 +78,8 @@ module GamePieces
 
   # bishop piece class
   class Bishop
+
+    include MoveChecks
 
     attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece
 
@@ -84,7 +96,10 @@ module GamePieces
   # pawn piece class
   class Pawn
 
-    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece
+    include MoveChecks
+
+    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece, 
+                  :queen_mode
     
     def initialize
       @start_pos = start_pos
@@ -93,17 +108,8 @@ module GamePieces
       @pos = [1, 6]
       @white_piece = white_piece
       @player = player
+      @queen_mode = false
     end
-
-    def check_move_validity(start_pos, stop_pos)
-      return false if (start_pos[0] - stop_pos[0]).abs > 1 || (start_pos[1] - stop_pos[1]).abs > 1
-
-      return false if (start_pos[0] - stop_pos[0]).abs.zero? && (start_pos[1] - stop_pos[1]).abs >= 1
-
-      true
-    end
-
-
   end
 
 end

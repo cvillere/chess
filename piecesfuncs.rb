@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+
+
 # Addl functions for pieces
 module PiecesFuncs
 
