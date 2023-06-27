@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'MoveChecks'
+require_relative 'move_checks'
 
 module GamePieces
 
@@ -99,7 +99,7 @@ module GamePieces
     include MoveChecks
 
     attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece, 
-                  :queen_mode
+                  :queen_mode, :num_of_turns
     
     def initialize
       @start_pos = start_pos
@@ -110,6 +110,7 @@ module GamePieces
       @player = player
       @queen_mode = false
     end
+    
   end
 
 end

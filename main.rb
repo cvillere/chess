@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
+require 'pry'
+
 require_relative 'gamepieces'
 require_relative 'player'
-require_relative 'PiecesFuncs'
+require_relative 'piecesfuncs'
 require_relative 'displayinstructions'
+
 
 # board class for chess game
 class GameBoard
@@ -83,13 +86,26 @@ class GameBoard
     gets.chomp
   end
 
+#=begin
+
   def deter_piece(start_spot)
     @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
     # puts "my_pieces #{my_pieces}"
     my_pieces.each do |n|
       n.find { |pie| return pie if pie.start_pos == start_spot }
     end
+    nil
   end
+#=end
+
+=begin
+  def deter_piece(start_spot)
+    @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
+    # puts "my_pieces #{my_pieces}"
+    my_pieces.find { |pie| return pie if pie.start_pos == start_spot }
+
+  end
+=end
 
   def start_game
     game_instructions
@@ -97,7 +113,6 @@ class GameBoard
     turns
     x = true
     until x == false
-      show_board_with_numbers
       play_game
       turns
     end
@@ -109,24 +124,26 @@ class GameBoard
   end
 
   def player_move
+    show_board_with_numbers
     start_spot = get_start_spot(@current_player)
     stop_spot = get_stop_spot(@current_player)
-    check_move = deter_leg_move(start_spot, stop_spot) ## produces an error right now -- need to add self as arg.
-    puts "check_move #{check_move}"
-    (try_again; player_move) if check_move == false
     curr_pie = deter_piece(start_spot)
+    puts "curr_pie #{curr_pie}"
+    check_move = deter_leg_move(start_spot, stop_spot, self, curr_pie)
+    # puts "line 117 - check_move #{check_move}"
+    (try_again; player_move) if check_move == false
     curr_pie.start_pos = stop_spot
     @board[stop_spot[0]][stop_spot[1]] = curr_pie.symbol
     @board[start_spot[0]][start_spot[1]] = "\u25AA"
   end
 
-  def deter_leg_move(start_spot, stop_spot)
+  def deter_leg_move(start_spot, stop_spot, obj, piece)
     curr_pie = deter_piece(start_spot)
     puts "curr_pie -- #{curr_pie}"
-    puts "current_player - #{@current_player}"
-    return false if @current_player != curr_pie.player
-    puts "check #{pick_move_val_meth(@board, start_spot, stop_spot, curr_pie.class.name)}"
-    pick_move_val_meth(@board, start_spot, stop_spot, curr_pie.class.name)
+    puts "current_player -- #{@current_player}"
+    return false if curr_pie == nil
+    return false if @current_player != curr_pie.player 
+    curr_pie.deter_piece_check(start_spot, stop_spot, obj, piece)
   end
 
   def place_piece 

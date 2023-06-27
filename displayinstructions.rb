@@ -41,6 +41,7 @@ module DisplayInstructions
     col -= 1
     [row, col]
   end
+end
 
 =begin
 
@@ -66,4 +67,3 @@ module DisplayInstructions
   end
 
 =end
-end
