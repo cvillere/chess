@@ -128,9 +128,7 @@ class GameBoard
     start_spot = get_start_spot(@current_player)
     stop_spot = get_stop_spot(@current_player)
     curr_pie = deter_piece(start_spot)
-    puts "curr_pie #{curr_pie}"
     check_move = deter_leg_move(start_spot, stop_spot, self, curr_pie)
-    # puts "line 117 - check_move #{check_move}"
     (try_again; player_move) if check_move == false
     curr_pie.start_pos = stop_spot
     @board[stop_spot[0]][stop_spot[1]] = curr_pie.symbol
@@ -138,12 +136,10 @@ class GameBoard
   end
 
   def deter_leg_move(start_spot, stop_spot, obj, piece)
-    curr_pie = deter_piece(start_spot)
-    puts "curr_pie -- #{curr_pie}"
     puts "current_player -- #{@current_player}"
-    return false if curr_pie == nil
-    return false if @current_player != curr_pie.player 
-    curr_pie.deter_piece_check(start_spot, stop_spot, obj, piece)
+    return false if piece == nil
+    return false if @current_player != piece.player 
+    piece.deter_piece_check(start_spot, stop_spot, obj, piece)
   end
 
   def place_piece 
