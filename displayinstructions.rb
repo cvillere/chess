@@ -21,10 +21,11 @@ module DisplayInstructions
   def get_start_spot(player)
     puts "#{player.name}, please select the row of the piece you would like to move."
     row = gets.chomp.to_i
-    (try_again; get_start_spot) if row < 1 || row > 8
+    (try_again; get_start_spot(player)) if !(1..8).include?(row)
+    #(try_again; get_start_spot) if (row < 1 || row > 8)
     puts "#{player.name}, please select the col of the piece you would like to move."
     col = gets.chomp.to_i
-    (try_again; get_start_spot) if col < 1 || col > 8
+    (try_again; get_start_spot(player)) if !(1..8).include?(col)
     row -= 1
     col -= 1
     [row, col]
@@ -33,10 +34,10 @@ module DisplayInstructions
   def get_stop_spot(player)
     puts "#{player.name}, please select the row you would like to move your piece to."
     row = gets.chomp.to_i
-    (try_again; get_stop_spot) if row < 1 || row > 8
+    (try_again; get_stop_spot(player)) if !(1..8).include?(row)
     puts "#{player.name}, please select the col you would like to move your piece to."
     col = gets.chomp.to_i
-    (try_again; get_start_spot) if col < 1 || col > 8
+    (try_again; get_start_spot(player)) if !(1..8).include?(col)
     row -= 1
     col -= 1
     [row, col]

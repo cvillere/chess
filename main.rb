@@ -137,6 +137,7 @@ class GameBoard
 
   def deter_leg_move(start_spot, stop_spot, obj, piece)
     puts "current_player -- #{@current_player}"
+    # return false if (start_spot.length != 2 || stop_spot.length != 2)
     return false if piece == nil
     return false if @current_player != piece.player 
     piece.deter_piece_check(start_spot, stop_spot, obj, piece)
