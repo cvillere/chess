@@ -120,7 +120,8 @@ class GameBoard
   end
 
   def play_game
-    player_move
+    made_move = player_move
+    place_piece(made_move)
   end
 
   def player_move
@@ -129,10 +130,10 @@ class GameBoard
     stop_spot = get_stop_spot(@current_player)
     curr_pie = deter_piece(start_spot)
     check_move = deter_leg_move(start_spot, stop_spot, self, curr_pie)
+    puts "check_move #{check_move}"
+    move_info = [start_spot, stop_spot, curr_pie]
+    return move_info if check_move == true
     (try_again; player_move) if check_move == false
-    curr_pie.start_pos = stop_spot
-    @board[stop_spot[0]][stop_spot[1]] = curr_pie.symbol
-    @board[start_spot[0]][start_spot[1]] = "\u25AA"
   end
 
   def deter_leg_move(start_spot, stop_spot, obj, piece)
@@ -142,8 +143,10 @@ class GameBoard
     piece.deter_piece_check(start_spot, stop_spot, obj, piece)
   end
 
-  def place_piece 
-    
+  def place_piece(move_info)
+    move_info[2].start_pos = move_info[1]
+    @board[move_info[1][0]][move_info[1][1]] = move_info[2].symbol
+    @board[move_info[0][0]][move_info[0][1]] = "\u25AA"
   end
 
 end

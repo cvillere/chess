@@ -7,18 +7,18 @@ module MoveChecks
   BISHOP_PATHS = [[1, 1], [1, -1], [-1, -1], [-1, 1]].freeze
 
   def deter_piece_check(start_pos, end_pos, obj, piece)
-    check_back_row(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::Pawn
-    check_knight_move(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::Knight
-    check_bishop_move(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::Bishop
+    return check_back_row(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::Pawn
+    return check_knight_move(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::Knight
+    return check_bishop_move(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::Bishop
   end
 
   def check_back_row(start_pos, end_pos, obj, piece)
     return true if piece.queen_mode == true
     return false if pawn_move_checks(start_pos, end_pos, obj, piece) == false
-    # pawn_move_checks(start_pos, end_pos, obj, piece)
     if (end_pos[0] == 0 || end_pos[0] == 7) && piece.queen_mode == false
       piece.queen_mode = true
     end
+    true
   end
 
   def first_pawn_move_check(start_pos, end_pos, obj, piece)
@@ -57,7 +57,7 @@ module MoveChecks
     return false if (start_pos[0] - end_pos[0] == 0 || start_pos[1] - end_pos[1] == 0)
     if bishop_patt(start_pos, end_pos) == false
       return false
-    else2
+    else
       return check_pieces_between(start_pos, end_pos, obj, bishop_patt(start_pos, end_pos))
     end
   end
