@@ -18,13 +18,23 @@ module MoveChecks
     return check_king_move(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::King
   end
 
-  def check_curr_pos(start_pos, end_pos, board_pos, obj)
+  def check_same_color(start_pos, end_pos, obj)
+    return true if obj.deter_piece(end_pos) == nil
+    if obj.deter_piece(start_pos).black_piece == obj.deter_piece(end_pos).black_piece
+      false
+    else
+      true
+    end
+  end
+
+  def check_curr_pos(start_pos, end_pos, obj, board_pos)
     return true if obj.deter_piece(board_pos) == nil
     return false if obj.deter_piece(board_pos) != nil && board_pos != end_pos
-    return false if obj.deter_piece(start_pos).black_piece == obj.deter_piece(end_pos).black_piece
+    return false if check_same_color(start_pos, end_pos, obj) == false
   end
 
   def check_back_row(start_pos, end_pos, obj, piece)
+    return false if check_same_color(start_pos, end_pos, obj) == false
     return true if piece.queen_mode == true
     return false if pawn_move_checks(start_pos, end_pos, obj, piece) == false
     if (end_pos[0] == 0 || end_pos[0] == 7) && piece.queen_mode == false
@@ -96,6 +106,7 @@ module MoveChecks
     return false if (start_pos[0] - end_pos[0] == 0 && start_pos[1] - end_pos[1] == 0)
     return false if ((start_pos[0] - end_pos[0]).abs > 1 || (start_pos[1] - end_pos[1]).abs > 1)
     # puts "obj.board #{obj.board[start_pos[0]][start_pos[1]].black_piece}"
+    return false if check_same_color(start_pos, end_pos, obj) == false
   end
 
 
@@ -120,7 +131,7 @@ module MoveChecks
       new_row_pos += patt[0]
       new_col_pos += patt[1]
       board_pos = [new_row_pos, new_col_pos]
-      return false if check_curr_pos(start_pos, end_pos, board_pos, obj) == false
+      return false if check_curr_pos(start_pos, end_pos, obj, board_pos) == false
     end
     true
   end
