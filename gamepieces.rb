@@ -14,13 +14,13 @@ module GamePieces
     include MoveChecks
 
     attr_accessor :start_pos, :end_pos, :symbol, :pos,
-                  :white_piece, :player, :check, :check_mate
+                  :black_piece, :player, :check, :check_mate
 
     def initialize
       @start_pos = start_pos
       @symbol = ["\u265A", "\u2654"]
       @pos = [0, 7]
-      @white_piece = white_piece
+      @black_piece = black_piece
       @player = player
       @check = nil
       @check_mate = nil
@@ -32,13 +32,13 @@ module GamePieces
 
     include MoveChecks
 
-    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece
+    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :black_piece
 
     def initialize
       @start_pos = start_pos
       @symbol = ["\u265B", "\u2655"]
       @pos = [0, 7]
-      @white_piece = white_piece
+      @black_piece = black_piece
       @player = player
     end
   end
@@ -48,13 +48,13 @@ module GamePieces
 
     include MoveChecks
 
-    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece
+    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :black_piece
 
     def initialize
       @start_pos = start_pos
       @symbol = ["\u265C", "\u2656"]
       @pos = [0, 7]
-      @white_piece = white_piece
+      @black_piece = black_piece
       @player = player
     end
     
@@ -65,13 +65,13 @@ module GamePieces
 
     include MoveChecks
 
-    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece
+    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :black_piece
     
     def initialize
       @start_pos = start_pos
       @symbol = ["\u265E", "\u2658"]
       @pos = [0, 7]
-      @white_piece = white_piece
+      @black_piece = black_piece
       @player = player
     end
   end
@@ -81,13 +81,13 @@ module GamePieces
 
     include MoveChecks
 
-    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece
+    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :black_piece
 
     def initialize
       @start_pos = start_pos
       @symbol = ["\u265D", "\u2657"]
       @pos = [0, 7]
-      @white_piece = white_piece
+      @black_piece = black_piece
       @player = player
     end
 
@@ -98,7 +98,7 @@ module GamePieces
 
     include MoveChecks
 
-    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :white_piece, 
+    attr_accessor :start_pos, :end_pos, :symbol, :pos, :player, :black_piece,
                   :queen_mode, :num_of_turns
     
     def initialize
@@ -106,7 +106,7 @@ module GamePieces
       @num_of_turns = 0
       @symbol = ["\u265F", "\u2659"]
       @pos = [1, 6]
-      @white_piece = white_piece
+      @black_piece = black_piece
       @player = player
       @queen_mode = false
     end

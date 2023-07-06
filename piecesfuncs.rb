@@ -12,11 +12,12 @@ module PiecesFuncs
   end
 
   def assign_vars(color, init_obj)
-    init_obj.white_piece = color
-    init_obj.symbol = deter_gm_piece(init_obj.white_piece, init_obj.symbol)
+    init_obj.black_piece = color
+    init_obj.symbol = deter_gm_piece(init_obj.black_piece, init_obj.symbol)
     init_obj
   end
 
+=begin
   def pick_move_val_meth(board, start_pos, stop_pos, obj_name)
     check_pawn_move_validity(board, start_pos, stop_pos) if obj_name.include? 'Pawn'
   end
@@ -31,7 +32,6 @@ module PiecesFuncs
 
     true
   end
-
-
+=end
 
 end

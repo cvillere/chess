@@ -37,7 +37,7 @@ module DisplayInstructions
     (try_again; get_stop_spot(player)) if !(1..8).include?(row)
     puts "#{player.name}, please select the col you would like to move your piece to."
     col = gets.chomp.to_i
-    (try_again; get_start_spot(player)) if !(1..8).include?(col)
+    (try_again; get_stop_spot(player)) if !(1..8).include?(col)
     row -= 1
     col -= 1
     [row, col]

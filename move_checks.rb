@@ -7,6 +7,7 @@ module MoveChecks
   BISHOP_PATHS = [[1, 1], [1, -1], [-1, -1], [-1, 1]].freeze
   ROOK_MOVES = [[1, 0], [0, 1], [-1, 0], [0, -1]].freeze
   QUEEN_MOVES = [[1, 1], [1, -1], [-1, -1], [-1, 1], [1, 0], [0, 1], [-1, 0], [0, -1]].freeze
+  KING_MOVES = [[1, 0], [-1, 0], [0, -1], [0, 1], [1, 1], [-1, 1], [-1, -1], [1, -1]].freeze
 
   def deter_piece_check(start_pos, end_pos, obj, piece)
     return check_back_row(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::Pawn
@@ -14,6 +15,13 @@ module MoveChecks
     return check_bishop_move(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::Bishop
     return check_rook_move(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::Rook
     return check_queen_move(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::Queen
+    return check_king_move(start_pos, end_pos, obj, piece) if piece.is_a? GamePieces::King
+  end
+
+  def check_curr_pos(start_pos, end_pos, board_pos, obj)
+    return true if obj.deter_piece(board_pos) == nil
+    return false if obj.deter_piece(board_pos) != nil && board_pos != end_pos
+    return false if obj.deter_piece(start_pos).black_piece == obj.deter_piece(end_pos).black_piece
   end
 
   def check_back_row(start_pos, end_pos, obj, piece)
@@ -84,6 +92,13 @@ module MoveChecks
     end
   end
 
+  def check_king_move(start_pos, end_pos, obj, piece)
+    return false if (start_pos[0] - end_pos[0] == 0 && start_pos[1] - end_pos[1] == 0)
+    return false if ((start_pos[0] - end_pos[0]).abs > 1 || (start_pos[1] - end_pos[1]).abs > 1)
+    # puts "obj.board #{obj.board[start_pos[0]][start_pos[1]].black_piece}"
+  end
+
+
   def patt_finder(start_pos, end_pos, patt)
     patt.each do |n|
       new_row_pos = start_pos[0]
@@ -98,13 +113,14 @@ module MoveChecks
   end
 
   def check_pieces_between(start_pos, end_pos, obj, patt)
-    loop_val = (start_pos[0] - end_pos[0]).abs - 1
+    (start_pos[0] - end_pos[0]).abs.zero? ? loop_val = (start_pos[1] - end_pos[1]).abs : loop_val = (start_pos[0] - end_pos[0]).abs
     new_row_pos = start_pos[0]
     new_col_pos = start_pos[1]
     loop_val.times do
       new_row_pos += patt[0]
       new_col_pos += patt[1]
-      return false if obj.board[new_row_pos][new_col_pos] != "\u25AA"
+      board_pos = [new_row_pos, new_col_pos]
+      return false if check_curr_pos(start_pos, end_pos, board_pos, obj) == false
     end
     true
   end
