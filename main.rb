@@ -152,7 +152,6 @@ class GameBoard
 
   def remove_piece(stop_spot)
     @current_player == @player_one ? remove_arr = @white_pieces : remove_arr = @black_pieces
-    puts "elim_piece - #{elim_piece(remove_arr, stop_spot)}"
     elim_piece(remove_arr, stop_spot)
   end
 

@@ -50,10 +50,12 @@ module MoveChecks
     end
   end
 
-  def check_norm_move(start_pos, end_pos, obj)
+  def check_norm_move(start_pos, end_pos, obj, piece)
     return false if (start_pos[0] - end_pos[0]) == 0
     return false if (start_pos[0] - end_pos[0]) > 1
     return false if (start_pos[0] - end_pos[0]) < -1
+    return false if (start_pos[0] - end_pos[0]) > 0 && piece.black_piece == true
+    return false if (start_pos[0] - end_pos[0]) < 0 && piece.black_piece == false
     return false if obj.board[start_pos[0]][start_pos[1]] == "\u25AA"
   end
 
@@ -64,7 +66,7 @@ module MoveChecks
 
   def pawn_move_checks(start_pos, end_pos, obj, piece)
     return true if first_pawn_move_check(start_pos, end_pos, obj, piece) == true
-    return false if check_norm_move(start_pos, end_pos, obj) == false
+    return false if check_norm_move(start_pos, end_pos, obj, piece) == false
     return false if taking_piece(start_pos, end_pos, obj) == false
   end
 
