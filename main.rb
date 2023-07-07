@@ -86,8 +86,7 @@ class GameBoard
     gets.chomp
   end
 
-#=begin
-
+=begin
   def deter_piece(start_spot)
     @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
     # puts "my_pieces #{my_pieces}"
@@ -96,16 +95,16 @@ class GameBoard
     end
     nil
   end
-#=end
+=end
 
-=begin
   def deter_piece(start_spot)
     @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
     # puts "my_pieces #{my_pieces}"
-    my_pieces.find { |pie| return pie if pie.start_pos == start_spot }
-
+    my_pieces.each do |n|
+      n.find { |pie| return pie if pie.start_pos == start_spot }
+    end
+      nil
   end
-=end
 
   def start_game
     game_instructions
@@ -122,6 +121,7 @@ class GameBoard
   def play_game
     made_move = player_move
     place_piece(made_move)
+    puts "@w_p #{@white_pieces}"
   end
 
   def player_move
@@ -147,7 +147,23 @@ class GameBoard
     move_info[2].start_pos = move_info[1]
     @board[move_info[1][0]][move_info[1][1]] = move_info[2].symbol
     @board[move_info[0][0]][move_info[0][1]] = "\u25AA"
+    remove_piece(move_info[1])
   end
+
+  def remove_piece(stop_spot)
+    @current_player == @player_one ? remove_arr = @white_pieces : remove_arr = @black_pieces
+    puts "elim_piece - #{elim_piece(remove_arr, stop_spot)}"
+    elim_piece(remove_arr, stop_spot)
+  end
+
+  def elim_piece(pieces_arr, spot)
+    pieces_arr.each do |n|
+      n.find do |pie|
+        n.delete(pie) if pie.start_pos == spot
+      end
+    end
+  end
+
 
 end
 

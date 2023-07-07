@@ -55,7 +55,6 @@ module MoveChecks
     return false if (start_pos[0] - end_pos[0]) > 1
     return false if (start_pos[0] - end_pos[0]) < -1
     return false if obj.board[start_pos[0]][start_pos[1]] == "\u25AA"
-    return false if obj.board[end_pos[0]][end_pos[1]] != "\u25AA"
   end
 
   def taking_piece(start_pos, end_pos, obj)
