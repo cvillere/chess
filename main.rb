@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
-require 'pry'
-
 require_relative 'gamepieces'
 require_relative 'player'
 require_relative 'piecesfuncs'
 require_relative 'displayinstructions'
-
 
 # board class for chess game
 class GameBoard
@@ -15,7 +12,7 @@ class GameBoard
   include PiecesFuncs
   include DisplayInstructions
 
-  attr_accessor :board, :player_one, :player_two, :current_player
+  attr_accessor :board, :player_one, :player_two, :black_pieces, :white_pieces, :current_player
 
   def initialize
     @board = Array.new(8) { Array.new(8, "\u25AA") }
@@ -38,8 +35,20 @@ class GameBoard
       Pawn.new, Pawn.new, Pawn.new]]
   end
 
+
+
   def turns
     @current_player == @player_one ? @current_player = @player_two : @current_player = @player_one
+  end
+
+  def deter_turn
+    if deter_check == true && @current_player == @player_one
+      @current_player = @player_one
+    elsif deter_check == true && @current_player == @player_two
+      @current_player = @player_two
+    else
+      turns
+    end
   end
 
   def show_board_with_numbers
@@ -86,24 +95,12 @@ class GameBoard
     gets.chomp
   end
 
-=begin
   def deter_piece(start_spot)
     @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
-    # puts "my_pieces #{my_pieces}"
     my_pieces.each do |n|
       n.find { |pie| return pie if pie.start_pos == start_spot }
     end
     nil
-  end
-=end
-
-  def deter_piece(start_spot)
-    @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
-    # puts "my_pieces #{my_pieces}"
-    my_pieces.each do |n|
-      n.find { |pie| return pie if pie.start_pos == start_spot }
-    end
-      nil
   end
 
   def start_game
@@ -111,9 +108,9 @@ class GameBoard
     initiate_board
     turns
     x = true
-    until x == false
-      play_game
-      turns
+    until deter_checkmate == false ## will eventually be until deter_checkmate == true
+      play_game      
+      deter_turn         ## This will eventually be deter_turn ;; used to be turns
     end
     new_game
   end
@@ -121,7 +118,6 @@ class GameBoard
   def play_game
     made_move = player_move
     place_piece(made_move)
-    puts "@w_p #{@white_pieces}"
   end
 
   def player_move
@@ -162,7 +158,65 @@ class GameBoard
       end
     end
   end
+  
+  def deter_king_piece
+    @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
+    my_pieces.each do |n|
+      n.find { |pie| return pie if pie.is_a? GamePieces::King }
+    end
+    nil
+  end
 
+  def find_potent_legals
+    piece = deter_king_piece
+    potent_legal_posits = []
+    MoveChecks::KING_MOVES.each do |n|
+      legal_row = n[0] + piece.start_pos[0]
+      legal_col = n[1] + piece.start_pos[1]
+      potent_legal_posits.push([legal_row, legal_col]) if (0..7).include?(legal_row) && (0..7).include?(legal_col)
+    end
+    potent_legal_posits.push(piece.start_pos)
+    potent_legal_posits
+  end
+
+  def find_legal_moves
+    piece = deter_king_piece
+    legal_king_moves = []
+    potent_moves = find_potent_legals
+    potent_moves.each do |n|
+      if deter_leg_move(piece.start_pos, n, self, piece) == true
+        legal_king_moves.push(n)
+      end
+    end
+    legal_king_moves
+  end
+
+  def deter_potent_checkmate(piece)
+    game_deter_arr = []
+    legal_moves = find_legal_moves
+    @current_player == @player_one ? other_player_p = @white_pieces : other_player_p = @black_pieces
+    legal_moves.each do |n|
+      posit_deter = []
+      other_player_p.each do |r|
+        posit_deter.push(deter_piece_check(r.start_pos, n, self, r))
+      end
+      posit_deter.include?(true) ? game_deter_arr.push(true) : game_deter_arr.push(false)
+    end
+    game_deter_arr
+  end
+
+  def deter_checkmate
+    outcome_arr = deter_potent_checkmate(deter_king_piece)
+    return true if outcome_arr.all? { |n| n == false } 
+    # return false if outcome_array.all? { |n| n == true }
+    false
+  end
+
+  def deter_check
+    outcome_arr = deter_potent_checkmate(deter_king_piece)
+    return true if outcome_arr.any? { |n| n == true }
+    false
+  end
 
 end
 
