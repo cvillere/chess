@@ -12,6 +12,7 @@ module GamePieces
   class King
 
     include MoveChecks
+    include DeterCheck
 
     attr_accessor :start_pos, :end_pos, :symbol, :pos,
                   :black_piece, :player, :check, :check_mate

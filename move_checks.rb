@@ -107,6 +107,8 @@ module MoveChecks
     return false if (start_pos[0] - end_pos[0] == 0 && start_pos[1] - end_pos[1] == 0)
     return false if ((start_pos[0] - end_pos[0]).abs > 1 || (start_pos[1] - end_pos[1]).abs > 1)
     return false if check_same_color(start_pos, end_pos, obj) == false
+    puts "c_s_c #{check_same_color(start_pos, end_pos, obj)}"
+    true
   end
 
 

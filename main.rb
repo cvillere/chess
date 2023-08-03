@@ -107,12 +107,13 @@ class GameBoard
     game_instructions
     initiate_board
     turns
-    x = true
-    until deter_checkmate == false ## will eventually be until deter_checkmate == true
+    # puts "line 111 #{deter_checkmate}"
+    until deter_checkmate == true ## will eventually be until deter_checkmate == true
+      # puts "line 111 #{deter_checkmate}"
       play_game      
       deter_turn         ## This will eventually be deter_turn ;; used to be turns
     end
-    new_game
+    # new_game
   end
 
   def play_game
@@ -133,13 +134,13 @@ class GameBoard
   end
 
   def deter_leg_move(start_spot, stop_spot, obj, piece)
-    puts "current_player -- #{@current_player}"
     return false if piece == nil
     return false if @current_player != piece.player 
     piece.deter_piece_check(start_spot, stop_spot, obj, piece)
   end
 
   def place_piece(move_info)
+    puts "line 142 - move_info #{move_info}"
     move_info[2].start_pos = move_info[1]
     @board[move_info[1][0]][move_info[1][1]] = move_info[2].symbol
     @board[move_info[0][0]][move_info[0][1]] = "\u25AA"
@@ -160,60 +161,69 @@ class GameBoard
   end
   
   def deter_king_piece
-    @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
+    @current_player == @player_one ? my_pieces = @white_pieces : my_pieces = @black_pieces
     my_pieces.each do |n|
       n.find { |pie| return pie if pie.is_a? GamePieces::King }
     end
     nil
   end
 
-  def find_potent_legals
-    piece = deter_king_piece
+  def find_potent_legals(piece)
     potent_legal_posits = []
     MoveChecks::KING_MOVES.each do |n|
       legal_row = n[0] + piece.start_pos[0]
       legal_col = n[1] + piece.start_pos[1]
       potent_legal_posits.push([legal_row, legal_col]) if (0..7).include?(legal_row) && (0..7).include?(legal_col)
     end
-    potent_legal_posits.push(piece.start_pos)
     potent_legal_posits
   end
 
   def find_legal_moves
     piece = deter_king_piece
     legal_king_moves = []
-    potent_moves = find_potent_legals
+    potent_moves = find_potent_legals(piece)
+    # puts "potent_moves #{potent_moves}"
     potent_moves.each do |n|
-      if deter_leg_move(piece.start_pos, n, self, piece) == true
+      if piece.check_king_poss_moves(piece.start_pos, n, self, piece) == true
+        puts "piece.start_pos #{piece.start_pos}"
+        puts "n #{n}"
+        puts "piece #{piece}"
+        puts "p_d_c #{piece.deter_piece_check(piece.start_pos, n, self, piece)}"
         legal_king_moves.push(n)
       end
     end
+    legal_king_moves.push(piece.start_pos)
     legal_king_moves
   end
 
-  def deter_potent_checkmate(piece)
+  def deter_potent_checkmate
     game_deter_arr = []
     legal_moves = find_legal_moves
-    @current_player == @player_one ? other_player_p = @white_pieces : other_player_p = @black_pieces
+    puts "line 198 legal_moves #{legal_moves}"
+    @current_player == @player_one ? other_player_p = @black_pieces : other_player_p = @white_pieces
     legal_moves.each do |n|
       posit_deter = []
       other_player_p.each do |r|
-        posit_deter.push(deter_piece_check(r.start_pos, n, self, r))
+        r.each do |pr|
+          posit_deter.push(pr.deter_piece_check(pr.start_pos, n, self, pr))
+        end
       end
       posit_deter.include?(true) ? game_deter_arr.push(true) : game_deter_arr.push(false)
     end
+    puts "line 212 game_deter_arr #{game_deter_arr}"
     game_deter_arr
   end
 
   def deter_checkmate
-    outcome_arr = deter_potent_checkmate(deter_king_piece)
-    return true if outcome_arr.all? { |n| n == false } 
+    outcome_arr = deter_potent_checkmate
+    return true if outcome_arr.all? { |n| n == true } 
     # return false if outcome_array.all? { |n| n == true }
     false
   end
 
   def deter_check
-    outcome_arr = deter_potent_checkmate(deter_king_piece)
+    outcome_arr = deter_potent_checkmate
+    puts "line 225 outcome_arr #{outcome_arr}"
     return true if outcome_arr.any? { |n| n == true }
     false
   end
