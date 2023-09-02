@@ -7,7 +7,7 @@ class Player
 
   def initialize(name)
     @name = name
-    @check = check
+    @check = false
   end
 
 end

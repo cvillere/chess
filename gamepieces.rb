@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'move_checks'
+require_relative 'deter_check'
 
 module GamePieces
 
@@ -111,7 +112,7 @@ module GamePieces
       @player = player
       @queen_mode = false
     end
-    
+
   end
 
 end

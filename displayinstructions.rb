@@ -25,8 +25,11 @@ module DisplayInstructions
     col = gets.chomp.to_i
     row -= 1
     col -= 1
-    return [row, col] if (0..7).include?(col) && (0..7).include?(row)
+    check_input = check_user_input(row, col)
+    # return [row, col] if (0..7).include?(col) && (0..7).include?(row)
     try_again; get_start_spot(player)
+    return [row, col] if check_input == true
+    (try_again; get_stop_spot(player)) if check_input == false
   end
 
   def get_stop_spot(player)
@@ -36,8 +39,21 @@ module DisplayInstructions
     col = gets.chomp.to_i
     row -= 1
     col -= 1
-    return [row, col] if (0..7).include?(col) || (0..7).include?(row)
-    (try_again; get_stop_spot(player))
+    check_input = check_user_input(row, col)
+    # return [row, col] if (0..7).include?(col) && (0..7).include?(row)
+    return [row, col] if check_input == true
+    (try_again; get_stop_spot(player)) if check_input == false
   end
+
+  def check_user_input(row, column)
+    # user_input = [row, column]
+    return false if row =~ /\D/ || col =~ (/\D/)
+    return false if row.between?(0, 7) == false || col.between?(0, 7) == false
+    true
+  end
+
+
+
 end
+
 
