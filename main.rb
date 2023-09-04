@@ -37,28 +37,9 @@ class GameBoard
       Pawn.new, Pawn.new, Pawn.new]]
   end
 
-
-
   def turns
     @current_player == @player_one ? @current_player = @player_two : @current_player = @player_one
   end
-
-=begin
-  def put_player_in_check
-    if @player_one.check == false && @player_two.check == false && deter_check == true
-      @current_player == @player_one ? @current_player = @player_two : @current_player = @player_one
-      @current_player.check = true
-    elsif @current_player.check == true && deter_check == true
-      @current_player == @player_one ? @current_player = @player_one : @current_player = @player_two
-    elsif deter_check == false
-      @player_one.check = false 
-      @player_two.check = false
-      turns
-    else
-      turns
-    end
-  end
-=end
 
   def show_board_with_numbers
     puts '   1  2  3  4  5  6  7  8'
@@ -101,6 +82,7 @@ class GameBoard
 
   def get_player_name(player_num)
     puts "what is player #{player_num}'s name"
+    gets.chomp
     # name = gets.chomp
     # get_player_name(player_num) if name.nil? || name == ""
   end
@@ -158,7 +140,7 @@ class GameBoard
   def deter_leg_move(start_spot, stop_spot, obj, piece)
     return false if piece.nil?
     return false if @current_player != piece.player
-    puts "deter_check #{deter_check(stop_spot)}" # 1
+    # puts "deter_check #{deter_check(stop_spot)}" # 1
     # return false if piece.is_a?(GamePieces::King) && deter_check(stop_spot) == true #2
     # need another check for if moving another piece puts you in check
     # return false if deter_check(deter_king_piece.start_pos) == true

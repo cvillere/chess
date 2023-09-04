@@ -23,13 +23,11 @@ module DisplayInstructions
     row = gets.chomp.to_i
     puts "#{player.name}, please select the col of the piece you would like to move."
     col = gets.chomp.to_i
+    check_input = check_user_input(row, col)
     row -= 1
     col -= 1
-    check_input = check_user_input(row, col)
-    # return [row, col] if (0..7).include?(col) && (0..7).include?(row)
-    try_again; get_start_spot(player)
     return [row, col] if check_input == true
-    (try_again; get_stop_spot(player)) if check_input == false
+    (try_again; get_start_spot(player)) if check_input == false
   end
 
   def get_stop_spot(player)
@@ -37,18 +35,18 @@ module DisplayInstructions
     row = gets.chomp.to_i
     puts "#{player.name}, please select the col you would like to move your piece to."
     col = gets.chomp.to_i
+    check_input = check_user_input(row, col)
     row -= 1
     col -= 1
-    check_input = check_user_input(row, col)
-    # return [row, col] if (0..7).include?(col) && (0..7).include?(row)
     return [row, col] if check_input == true
     (try_again; get_stop_spot(player)) if check_input == false
   end
 
-  def check_user_input(row, column)
+  def check_user_input(row, col)
     # user_input = [row, column]
-    return false if row =~ /\D/ || col =~ (/\D/)
-    return false if row.between?(0, 7) == false || col.between?(0, 7) == false
+    # return false if row =~ /\D/ || col =~ /\D/
+    return false if row == '' || col == ''
+    return false if row.between?(1, 8) == false || col.between?(1, 8) == false
     true
   end
 
