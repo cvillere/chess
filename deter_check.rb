@@ -11,7 +11,11 @@ module DeterCheck
   
   
   def check_king_color(start_pos, end_pos, obj)
-    return true if obj.deter_check_pieces(end_pos) == nil
+    return true if obj.deter_check_pieces(end_pos).nil?
+    puts "obj.deter_check_pieces(start_pos) #{obj.deter_check_pieces(start_pos)}"
+    puts "obj.deter_check_pieces(end_pos) #{obj.deter_check_pieces(end_pos)}"
+    puts "obj.deter_check_pieces(start_pos).black_piece #{obj.deter_check_pieces(start_pos).black_piece}"
+    puts "obj.deter_check_pieces(end_pos).black_piece #{obj.deter_check_pieces(end_pos).black_piece}"
     if obj.deter_check_pieces(start_pos).black_piece == obj.deter_check_pieces(end_pos).black_piece
       false
     else

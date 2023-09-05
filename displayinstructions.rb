@@ -38,6 +38,7 @@ module DisplayInstructions
     check_input = check_user_input(row, col)
     row -= 1
     col -= 1
+    #puts "--------------------------------------------------------------------------"
     return [row, col] if check_input == true
     (try_again; get_stop_spot(player)) if check_input == false
   end

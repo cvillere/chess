@@ -82,9 +82,16 @@ class GameBoard
 
   def get_player_name(player_num)
     puts "what is player #{player_num}'s name"
-    gets.chomp
-    # name = gets.chomp
-    # get_player_name(player_num) if name.nil? || name == ""
+    # gets.chomp
+    name = gets.chomp
+    return name if player_name_check(name) == true
+    get_player_name(player_num) if player_name_check(name) == false
+  end
+
+  def player_name_check(name)
+    return false if name.nil?
+    return false if name == ''
+    true
   end
 
   def make_all_piec_arr
@@ -111,11 +118,12 @@ class GameBoard
     initiate_board
     turns
     x = true
-    until x == false ## will eventually be until deter_checkmate(find_legal_moves) == true
+    until deter_checkmate(find_legal_moves) == true ## will eventually be until deter_checkmate(find_legal_moves) == true
       # puts "line 111 #{deter_checkmate(find_legal_moves)}"
+      puts "#{@current_player.name}, you are in check!" if deter_check(deter_king_piece.start_pos) == true #3
       play_game      
       turns
-      puts "#{@current_player.name}, you are in check!" if deter_check(deter_king_piece.start_pos) == true #3        ## Turns
+      # puts "#{@current_player.name}, you are in check!" if deter_check(deter_king_piece.start_pos) == true #3        ## Turns
     end
     new_game
   end
@@ -152,6 +160,7 @@ class GameBoard
     legal_pie_move = piece.deter_piece_check(start_spot, stop_spot, obj, piece)
     return false if legal_pie_move == false
     piece.start_pos = stop_spot
+    return false if check_same_color(stop_spot) == false
     check_status = deter_check(deter_king_piece.start_pos)
     if check_status == true
       piece.start_pos = start_spot
@@ -160,10 +169,21 @@ class GameBoard
     true
   end
 
+  def check_same_color(end_pos)
+    @current_player == @player_one ? pieces = @black_pieces : pieces = @white_pieces
+    all_pieces = pieces.flatten
+    count = 0
+    all_pieces.each do |r|
+      count += 1 if r.start_pos == end_pos
+    end
+    return false if count >= 2
+    true
+  end
+
 
   def place_piece(move_info)
     puts "line 142 - move_info #{move_info}"
-    move_info[2].start_pos = move_info[1]
+    # move_info[2].start_pos = move_info[1] -- No longer needed due to reconfiguring to check check
     @board[move_info[1][0]][move_info[1][1]] = move_info[2].symbol
     @board[move_info[0][0]][move_info[0][1]] = "\u25AA"
     remove_piece(move_info[1])
@@ -223,27 +243,29 @@ class GameBoard
   def deter_potent_checkmate(legal_moves)
     @current_player == @player_one ? other_player_p = @white_pieces : other_player_p = @black_pieces
     game_deter_arr = []
+    other_player_p_1d = other_player_p.flatten
     legal_moves.each do |n|
       puts "line 202 legal_moves #{legal_moves}"
-      other_player_p.each do |r|
-        posit_deter = []
-        r.each do |pr|
-          #puts "pr.sp - #{pr.start_pos}, n - #{n}, self - #{self}, pr - #{pr}"
-          posit_deter.push(pr.deter_piece_check(pr.start_pos, n, self, pr))
-        end
-        posit_deter.include?(true) ? game_deter_arr.push(true) : game_deter_arr.push(false)
-        puts "line 212 posit_deter #{posit_deter}"
+      posit_deter = []
+      other_player_p_1d.each do |r|
+        #puts "pr.sp - #{pr.start_pos}, n - #{n}, self - #{self}, pr - #{pr}"
+        posit_deter.push(r.deter_piece_check(r.start_pos, n, self, r))
       end
-      puts "line 218 game_deter_arr #{game_deter_arr}"
+      posit_deter.include?(true) ? game_deter_arr.push(true) : game_deter_arr.push(false)
+      # puts "line 218 posit_deter #{posit_deter}"
     end
-    # puts "line 220 game_deter_arr #{game_deter_arr}"
+    puts "line 239 game_deter_arr #{game_deter_arr}"
     game_deter_arr
   end
 
   def deter_checkmate(spots)
+    @current_player == @player_two ? win_player = @player_one : win_player = @player_two
+    @current_player == @player_two ? los_player = @player_two : los_player = @player_one
     outcome_arr = deter_potent_checkmate(spots)
-    return true if outcome_arr.all? { |n| n == true } 
-    # return false if outcome_array.all? { |n| n == true }
+    if outcome_arr.all? { |n| n == true } 
+      puts "#{win_player.name}, you have put #{los_player.name} into checkmate and have won the game!"
+      return true
+    end
     false
   end
 
