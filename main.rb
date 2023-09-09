@@ -1,10 +1,12 @@
 # frozen_string_literal: true
+require 'yaml'
 
 require_relative 'gamepieces'
 require_relative 'player'
 require_relative 'piecesfuncs'
 require_relative 'displayinstructions'
 require_relative 'deter_check'
+require_relative 'game_save'
 
 # board class for chess game
 class GameBoard
@@ -13,8 +15,10 @@ class GameBoard
   include PiecesFuncs
   include DisplayInstructions
   include DeterCheck
+  include GameSave
 
-  attr_accessor :board, :player_one, :player_two, :black_pieces, :white_pieces, :current_player
+  attr_accessor :board, :player_one, :player_two, :black_pieces, :white_pieces, :current_player,
+                :turn_count
 
   def initialize
     @board = Array.new(8) { Array.new(8, "\u25AA") }
@@ -23,6 +27,7 @@ class GameBoard
     @black_pieces = b_pieces
     @white_pieces = w_pieces
     @current_player = nil
+    @turn_count = 0
   end
 
   def b_pieces
@@ -113,17 +118,25 @@ class GameBoard
     nil
   end
 
-  def start_game
+  def initiate_game
     game_instructions
+    choose_previous_game
     initiate_board
     turns
-    x = true
-    until deter_checkmate(find_legal_moves) == true ## will eventually be until deter_checkmate(find_legal_moves) == true
-      # puts "line 111 #{deter_checkmate(find_legal_moves)}"
+  end
+
+  def game_save
+    save_game if (@turn_count % 5).zero?
+  end
+
+  def start_game
+    initiate_game
+    until deter_checkmate(find_legal_moves) == true
       puts "#{@current_player.name}, you are in check!" if deter_check(deter_king_piece.start_pos) == true #3
-      play_game      
+      play_game
       turns
-      # puts "#{@current_player.name}, you are in check!" if deter_check(deter_king_piece.start_pos) == true #3        ## Turns
+      @turn_count += 1
+      game_save
     end
     new_game
   end
