@@ -34,7 +34,9 @@ module GameSave
     end
     old_game = File.open(restarted_game, 'r') { YAML.load_file(restarted_game.to_s) }
     # old_game[0].display_correct_letters
-    puts old_game
+    p "old_game - #{old_game}"
+    p "old_game[0] - #{old_game[0]}"
+    old_game[0]
   end
 
   # Selecting a saved game to resume
@@ -43,13 +45,14 @@ module GameSave
     puts 'Select Game Number.'
     game_num = gets.chomp.to_i
     selected_game = game_num - 1
-    deserialize_game(selected_game) if game_num.between?(1, Dir['./saved_games/*'].length)
+    return deserialize_game(selected_game) if game_num.between?(1, Dir['./saved_games/*'].length)
     puts 'invalid selection' unless game_num.between?(1, Dir['./saved_games/*'].length)
     choose_deser_game
   end
 
   # method to prompt user whether they would like to resume a saved game
   def choose_previous_game
+    # unless Dir.exist?('./saved_games')
     return unless Dir.exist?('./saved_games')
     puts 'Would you like to restart a game? Enter 1 for yes and 2 for no'
     user_choice = gets.chomp
@@ -59,14 +62,5 @@ module GameSave
       return
     end
   end
-
-
-
-
-
-
-
-
-
 
 end

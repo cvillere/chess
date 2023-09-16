@@ -120,7 +120,10 @@ class GameBoard
 
   def initiate_game
     game_instructions
-    choose_previous_game
+    # return choose_previous_game.show_board_with_numbers if !choose_previous_game.nil?
+    previous_game = choose_previous_game
+    puts "previous_game #{previous_game}"
+    return previous_game.play_game if previous_game != nil
     initiate_board
     turns
   end
@@ -226,6 +229,11 @@ class GameBoard
   def find_potent_legals(piece)
     potent_legal_posits = []
     MoveChecks::KING_MOVES.each do |n|
+      puts "n - #{n}"
+      puts "piece #{piece}"
+      puts "piece.start_pos #{piece.start_pos}"
+      puts "piece.symbol #{piece.symbol}"
+      puts "piece.black_piece #{piece.black_piece}"
       legal_row = n[0] + piece.start_pos[0]
       legal_col = n[1] + piece.start_pos[1]
       potent_legal_posits.push([legal_row, legal_col]) if (0..7).include?(legal_row) && (0..7).include?(legal_col)
@@ -235,6 +243,7 @@ class GameBoard
 
   def find_legal_moves
     piece = deter_king_piece
+    puts "king_piece #{piece}"
     legal_king_moves = []
     potent_moves = find_potent_legals(piece)
     puts "potent_moves #{potent_moves}"
