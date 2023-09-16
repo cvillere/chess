@@ -118,12 +118,25 @@ class GameBoard
     nil
   end
 
+  def initiate_deser_game
+    previous_game = choose_previous_game
+    return if previous_game.nil?
+    @board = previous_game.board
+    @player_one = previous_game.player_one
+    @player_two = previous_game.player_two
+    @black_pieces = previous_game.black_pieces
+    @white_pieces = previous_game.white_pieces
+    @current_player = previous_game.current_player
+    @turn_count = previous_game.turn_count
+    previous_game
+  end
+
   def initiate_game
     game_instructions
     # return choose_previous_game.show_board_with_numbers if !choose_previous_game.nil?
-    previous_game = choose_previous_game
+    previous_game = initiate_deser_game
     puts "previous_game #{previous_game}"
-    return previous_game.play_game if previous_game != nil
+    return previous_game.start_game if previous_game != nil
     initiate_board
     turns
   end
@@ -133,7 +146,7 @@ class GameBoard
   end
 
   def start_game
-    initiate_game
+    initiate_game if @current_player.nil?
     until deter_checkmate(find_legal_moves) == true
       puts "#{@current_player.name}, you are in check!" if deter_check(deter_king_piece.start_pos) == true #3
       play_game
@@ -219,6 +232,8 @@ class GameBoard
   end
   
   def deter_king_piece
+    # puts "black_pieces - #{@black_pieces}"
+    # puts "white_pieces - #{@white_pieces}"
     @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
     my_pieces.each do |n|
       n.find { |pie| return pie if pie.is_a? GamePieces::King }

@@ -34,8 +34,11 @@ module GameSave
     end
     old_game = File.open(restarted_game, 'r') { YAML.load_file(restarted_game.to_s) }
     # old_game[0].display_correct_letters
-    p "old_game - #{old_game}"
+    # p "old_game - #{old_game}"
+    p "old_game.class - #{old_game.class}"
+    p "old_game[0].class - #{old_game[0].class}"
     p "old_game[0] - #{old_game[0]}"
+    # p "old_game(black_pieces) - #{old_game[0].black_pieces}"
     old_game[0]
   end
 
