@@ -33,12 +33,6 @@ module GameSave
       restarted_game = Dir['./saved_games/*'][player_selection]
     end
     old_game = File.open(restarted_game, 'r') { YAML.load_file(restarted_game.to_s) }
-    # old_game[0].display_correct_letters
-    # p "old_game - #{old_game}"
-    p "old_game.class - #{old_game.class}"
-    p "old_game[0].class - #{old_game[0].class}"
-    p "old_game[0] - #{old_game[0]}"
-    # p "old_game(black_pieces) - #{old_game[0].black_pieces}"
     old_game[0]
   end
 
@@ -55,7 +49,6 @@ module GameSave
 
   # method to prompt user whether they would like to resume a saved game
   def choose_previous_game
-    # unless Dir.exist?('./saved_games')
     return unless Dir.exist?('./saved_games')
     puts 'Would you like to restart a game? Enter 1 for yes and 2 for no'
     user_choice = gets.chomp

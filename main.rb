@@ -133,9 +133,7 @@ class GameBoard
 
   def initiate_game
     game_instructions
-    # return choose_previous_game.show_board_with_numbers if !choose_previous_game.nil?
     previous_game = initiate_deser_game
-    puts "previous_game #{previous_game}"
     return previous_game.start_game if previous_game != nil
     initiate_board
     turns
@@ -148,7 +146,7 @@ class GameBoard
   def start_game
     initiate_game if @current_player.nil?
     until deter_checkmate(find_legal_moves) == true
-      puts "#{@current_player.name}, you are in check!" if deter_check(deter_king_piece.start_pos) == true #3
+      puts "#{@current_player.name}, you are in check!" if deter_check(deter_king_piece.start_pos) == true
       play_game
       turns
       @turn_count += 1
@@ -168,7 +166,6 @@ class GameBoard
     stop_spot = get_stop_spot(@current_player)
     curr_pie = deter_piece(start_spot)
     check_move = deter_leg_move(start_spot, stop_spot, self, curr_pie)
-    puts "check_move #{check_move}"
     move_info = [start_spot, stop_spot, curr_pie]
     return move_info if check_move == true
     (try_again; player_move) if check_move == false
@@ -177,11 +174,6 @@ class GameBoard
   def deter_leg_move(start_spot, stop_spot, obj, piece)
     return false if piece.nil?
     return false if @current_player != piece.player
-    # puts "deter_check #{deter_check(stop_spot)}" # 1
-    # return false if piece.is_a?(GamePieces::King) && deter_check(stop_spot) == true #2
-    # need another check for if moving another piece puts you in check
-    # return false if deter_check(deter_king_piece.start_pos) == true
-    # piece.deter_piece_check(start_spot, stop_spot, obj, piece)
     deter_check_status(start_spot, stop_spot, obj, piece)
   end
 
@@ -211,8 +203,7 @@ class GameBoard
 
 
   def place_piece(move_info)
-    puts "line 142 - move_info #{move_info}"
-    # move_info[2].start_pos = move_info[1] -- No longer needed due to reconfiguring to check check
+    # puts "line 142 - move_info #{move_info}"
     @board[move_info[1][0]][move_info[1][1]] = move_info[2].symbol
     @board[move_info[0][0]][move_info[0][1]] = "\u25AA"
     remove_piece(move_info[1])
@@ -232,8 +223,6 @@ class GameBoard
   end
   
   def deter_king_piece
-    # puts "black_pieces - #{@black_pieces}"
-    # puts "white_pieces - #{@white_pieces}"
     @current_player == @player_one ? my_pieces = @black_pieces : my_pieces = @white_pieces
     my_pieces.each do |n|
       n.find { |pie| return pie if pie.is_a? GamePieces::King }
@@ -244,11 +233,6 @@ class GameBoard
   def find_potent_legals(piece)
     potent_legal_posits = []
     MoveChecks::KING_MOVES.each do |n|
-      puts "n - #{n}"
-      puts "piece #{piece}"
-      puts "piece.start_pos #{piece.start_pos}"
-      puts "piece.symbol #{piece.symbol}"
-      puts "piece.black_piece #{piece.black_piece}"
       legal_row = n[0] + piece.start_pos[0]
       legal_col = n[1] + piece.start_pos[1]
       potent_legal_posits.push([legal_row, legal_col]) if (0..7).include?(legal_row) && (0..7).include?(legal_col)
@@ -258,10 +242,8 @@ class GameBoard
 
   def find_legal_moves
     piece = deter_king_piece
-    puts "king_piece #{piece}"
     legal_king_moves = []
     potent_moves = find_potent_legals(piece)
-    puts "potent_moves #{potent_moves}"
     potent_moves.each do |n|
       if piece.check_king_poss_moves(piece.start_pos, n, self, piece) == true
         legal_king_moves.push(n)
@@ -282,16 +264,12 @@ class GameBoard
     game_deter_arr = []
     other_player_p_1d = other_player_p.flatten
     legal_moves.each do |n|
-      puts "line 202 legal_moves #{legal_moves}"
       posit_deter = []
       other_player_p_1d.each do |r|
-        #puts "pr.sp - #{pr.start_pos}, n - #{n}, self - #{self}, pr - #{pr}"
         posit_deter.push(r.deter_piece_check(r.start_pos, n, self, r))
       end
       posit_deter.include?(true) ? game_deter_arr.push(true) : game_deter_arr.push(false)
-      # puts "line 218 posit_deter #{posit_deter}"
     end
-    puts "line 239 game_deter_arr #{game_deter_arr}"
     game_deter_arr
   end
 
@@ -307,10 +285,8 @@ class GameBoard
   end
 
   def deter_check(spot)
-    # king_piece = deter_king_piece
     test_spot = push_king_pos(spot)
     outcome_arr = deter_potent_checkmate(test_spot)
-    puts "line 225 outcome_arr #{outcome_arr}"
     return true if outcome_arr.any? { |n| n == true }
     false
   end

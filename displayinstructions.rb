@@ -51,8 +51,6 @@ module DisplayInstructions
     true
   end
 
-
-
 end
 
 
